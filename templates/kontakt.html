@@ -1,0 +1,19 @@
+{%extends 'base.html'%}
+{%block title%} {{title}} {%endblock%}
+{%block body%}
+<form action="kontakt" method="post">
+    <br> <label style="padding:5px; display:inline-block; min-width:114px">Позывной:</label>
+    <input type="text" name="login" value="" placeholder="вводи">
+
+    <br><label style="padding:5px; display:inline-block; min-width:80px">Ваш уровень IQ:</label>
+    <input type="text" name="password" value="" placeholder="вводи">
+
+
+
+    <br><input type="submit" value="Отправить">
+
+    <p><a href="forgot_password">Забыли уровень IQ?</a></p>
+    <p><a href="registration">Регистрация</a></p>
+
+</form>
+{%endblock%}

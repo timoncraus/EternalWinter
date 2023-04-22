@@ -1,0 +1,14 @@
+{%extends 'base.html'%}
+{%block title%} {{title}} {%endblock%}
+{%block body%}
+<h3>Вопрос: {{sp_b.question}}</h3>
+<form action="/test" method="post">
+    <input type="hidden" name="id" value="{{sp_b['id']}}">
+    {% for i in sp_q %}
+    <br><input type="radio" value={{i}} name="quest">{{i}}
+    {% endfor %}
+    <br><input type="submit" value="Следующий вопрос">
+
+</form>
+
+{%endblock%}

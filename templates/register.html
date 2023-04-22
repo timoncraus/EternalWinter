@@ -1,0 +1,16 @@
+{%extends 'base.html'%}
+{%block title%} {{title}} {%endblock%}
+{%block body%}
+{% for message in get_flashed_messages() %}
+    <p>{{message}}</p>
+{% endfor %}
+<form action="" method="post" class="form-contact">
+<p><label>Логин: </label> <input type="text" name="name" value="" required />
+<p><label>Возраст: </label> <input type="text" name="age" value="" required />
+<p><label>Город: </label> <input type="text" name="city" value="" required />
+<p><label>Email: </label> <input type="text" name="email" value="" required />
+<p><label>Пароль: </label> <input type="password" name="psw" value="" required />
+<p><label>Повтор пароля: </label> <input type="password" name="psw2" value="" required />
+<p><input type="submit" value="Регистрация" />
+</form>
+{%endblock%}

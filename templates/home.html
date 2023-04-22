@@ -1,0 +1,24 @@
+{%extends 'base.html'%}
+{%block title%} {{title}} {%endblock%}
+{%block body%}
+<p class="content-text">
+    Привет! Ты на моем сайте Вечная Зима! Я — Снежный король. Ты можешь найти здесь много интересного.
+    <br>Если хочешь связаться со мной, перейди на соответствующую вкладку
+</p>
+<div class="outer">
+    <img class="image" src="{{ url_for('static', filename='image/computer.webp') }}">
+</div>
+
+<ul>
+    {% for u in info %}
+    <li><p>id: {{u.id}}, email: {{u.email}}</p>
+        <ul>
+        <li>Имя: {{u.name}}</li>
+        <li>Возраст: {{u.age}}</li>
+        <li>Город: {{u.city}}</li>
+        </ul>
+    </li>
+    {% endfor %}
+    </ul>
+
+{%endblock%}

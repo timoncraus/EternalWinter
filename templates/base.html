@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}">
+    <title>{%block title%}{%endblock%}</title>
+</head>
+<body>
+<header>
+    <img class="logo" src="{{ url_for('static', filename='image/logo.jpg') }}">
+    <div class="text">
+        <p class="title">Вечная зима</p>
+        <p>это моя зима, и я буду ее защищать</p>
+        <p>это мой уголок, и я буду в нем прятаться</p>
+    </div>
+    <div class="plug"></div>
+</header>
+<div class="line"></div>
+<main>
+    <nav>
+        <div class="nav-title">
+            <p>Навигация</p>
+        </div>
+        <ul class="nav-list">
+            {% for i in list %}
+                <li class="navig">
+                    <a href="{{ i['url'] }}" class="link"> {{ i['caption'] }} </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </nav>
+    <content>
+        {%block body%}{%endblock%}
+    </content>
+    <div class="addition">
+        <div class="connect">
+            
+                {% for message in get_flashed_messages() %}
+                <div class="message">
+                    <p>{{message}}</p>
+                </div>
+                {% endfor %}
+            {% if username is none %}
+            <p>Войдите в аккаунт</p>
+            <form action="contact" method="post">
+                <br> <label>Логин:</label>
+                <input type="text" name="login" value="" placeholder="">
+                <br><label>Пароль:</label>
+                <input type="text" name="password" value="" placeholder="">
+                <br><input type="submit" value="Отправить">
+                <p><a href="forgot">Забыли пароль?</a></p>
+                <p><a href="/register">Регистрация</a></p>
+            </form>
+            {% else %}
+            <p>Привет, {{username}}</p>
+            <p><a href="/disconnect">Выйти</a></p>
+            {% endif %}
+        </div>
+        <div class="mini-chat">
+            <p class="mini-chat-title">Мини-чат</p>
+            <div class="block-chat">
+                <ul class="messages"></ul>
+                <form id="send-msg"></form>
+                <label for="">Сообщение:</label>
+                <input type="text" name="login" value="" placeholder="">
+                <button type="submit">Отправить</button>
+            </div>
+            
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

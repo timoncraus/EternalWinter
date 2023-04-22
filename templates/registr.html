@@ -1,0 +1,27 @@
+{%extends 'base.html'%}
+{%block title%} {{title}} {%endblock%}
+{%block body%}
+{% for mes in get_flashed_messages() %}
+    <p>{{mes}}</p>
+{% endfor %}
+<form action="" method="POST">
+    <br> <label style="padding:5px; display:inline-block; min-width:114px">Позывной: (запомните его)</label>
+    <input type="text" name="username" value="" placeholder="вводи">
+
+    <br><label style="padding:5px; display:inline-block; min-width:80px">Ваш уровень IQ: (запомните его)</label>
+    <input type="text" name="level_iq" value="" placeholder="вводи">
+
+    <br><label style="padding:5px; display:inline-block; min-width:80px">Ваш статус:</label>
+    <input type="text" name="info" value="" placeholder="вводи">
+
+    <br><label style="padding:5px; display:inline-block; min-width:80px">Ваш электронный ящик для писем:</label>
+    <input type="text" name="email" value="" placeholder="вводи">
+
+    <br> <label style="padding:5px; display:inline-block; min-width:80px">Информация о вас:</label>
+    <br> <textarea cols="110%" rows="7" name="info"  placeholder="вводи"></textarea>
+
+
+    <br><input type="submit" value="Отправить">
+
+</form>
+{%endblock%}
