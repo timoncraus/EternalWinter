@@ -88,7 +88,7 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" language="JavaScript">
     $(document).ready(() => {
-        $("#messages").animate({scrollTop: $("#messages").offset().top+1600}, 2000);
+        $("#messages").animate({scrollTop: $("#messages").offset().top+1600}, 1000);
         var b = document.querySelector(".btn-func");
         b.addEventListener("click", function(){
             b.classList.toggle("active")
@@ -130,7 +130,6 @@
                 if(!b.classList.contains("active")){
                     $("#messages").animate({scrollTop: $("#messages").offset().top+3000}, 0);
                 }
-                console.log('Получено ')
             }
         });
     });
