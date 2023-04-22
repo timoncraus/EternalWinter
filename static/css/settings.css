@@ -4,12 +4,16 @@
     box-sizing: border-box;
 }
 body{
-
+    font-family: 'Gabriela', serif;
     display: flex;
     justify-content: top;
     align-items: start;
     flex-direction: column;
     
+}
+@font-face {
+	font-family: 'Ice'; 
+	src: url("/static/font/ice.ttf"); 
 }
 header{
     background: url("/static/image/winter.jpg") no-repeat 0px 0px;
@@ -47,6 +51,17 @@ content{
     background-color: rgb(246, 246, 114);
     border: 3px solid rgb(179, 179, 98);
 }
+h1{
+    font-family: 'Ice';
+    background-color: yellow;
+    color:rgb(72, 11, 11);
+    width: auto;
+    display: inline;
+    padding: 0 20px;
+}
+h1:hover{
+    color:rgb(255, 0, 0);
+}
 .line{
     background: url("/static/image/pattern.jpg");
     background-size:auto 100%;
@@ -58,10 +73,7 @@ content{
     height: 150px;
     border-radius: 50%;
 }
-@font-face {
-	font-family: 'Ice'; 
-	src: url("/static/font/ice.ttf"); 
-}
+
 .title{
     font-size: 100px;
     font-family: 'Ice'; 
@@ -113,19 +125,23 @@ content{
     color:white;
 
 }
+.ava{
+    width: 150px;
+    height: 150px;
+}
 /* ----------------------------------------------------------------------------------------------------- */
 .content-text{
     margin-top: 15px;
     margin-left: 10px;
     font-size: 20px;
-    font-family: 'Ice'; 
+    font-weight: bold;
 }
 .image{
     max-width: 80%;
     max-height: 80%;
 }
 .outer{
-    margin-top: 30px;
+    margin-top: 15px;
     width: 100%;
     height: auto;
     display: flex;

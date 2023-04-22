@@ -1,16 +1,10 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}">
-    <title>{{title}}</title>
-</head>
-<body>
-
-<h1 align="center">Страницу я не нашел</h1>
-<h2>Но человеческую многоножку нашел</h2>
-<a style="text-decoration: none; color: rgb(54, 122, 77); font-size: 160%; padding-left: 26%" href="{{url_for('home')}}">Вернуться в главную таверну</a> <br>
-
-
-</body>
-</html>
+{%extends 'base.html'%}
+{%block title%} {{title}} {%endblock%}
+{%block body%}
+<p class="content-text">
+    Я не знаю, что за страницу ты ищешь.
+</p>
+<div class="outer">
+    <img class="image" src="{{ url_for('static', filename='image/nothing.jpg') }}">
+</div>
+{%endblock%}

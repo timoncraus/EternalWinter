@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gabriela&display=swap" rel="stylesheet">
     <title>{%block title%}{%endblock%}</title>
 </head>
 <body>
@@ -23,13 +26,18 @@
         </div>
         <ul class="nav-list">
             {% for i in list %}
+                {% if i['caption'] == 'Ваш профиль' and username is not none or i['caption'] != 'Ваш профиль'%}
                 <li class="navig">
                     <a href="{{ i['url'] }}" class="link"> {{ i['caption'] }} </a>
                 </li>
+                {% endif %}
             {% endfor %}
         </ul>
     </nav>
     <content>
+        <div class="outer">
+            <h1>{{pageTitle}}</h1>
+        </div>
         {%block body%}{%endblock%}
     </content>
     <div class="addition">
@@ -43,16 +51,20 @@
             {% if username is none %}
             <p>Войдите в аккаунт</p>
             <form action="contact" method="post">
-                <br> <label>Логин:</label>
-                <input type="text" name="login" value="" placeholder="">
+                <br> <label>Имя:</label>
+                <br><input type="text" name="login" value="" placeholder="">
                 <br><label>Пароль:</label>
-                <input type="text" name="password" value="" placeholder="">
+                <br><input type="text" name="password" value="" placeholder="">
                 <br><input type="submit" value="Отправить">
                 <p><a href="forgot">Забыли пароль?</a></p>
                 <p><a href="/register">Регистрация</a></p>
             </form>
             {% else %}
             <p>Привет, {{username}}</p>
+            <div class="outer">
+                <img class='ava' src="{{url_for('userAva')}}">
+            </div>
+            
             <p><a href="/disconnect">Выйти</a></p>
             {% endif %}
         </div>
