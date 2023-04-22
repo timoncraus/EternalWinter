@@ -5,10 +5,11 @@ from sqlalchemy.orm import util
 from random import shuffle
 from datetime import datetime
 from sqlite3 import Binary
+import os
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'as8fr7s89fyfyas8f97f8afdfdsfgh9dsugri654kter9af3'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///table.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.dirname(os.path.abspath(__file__)) +'\\table.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -51,7 +52,10 @@ class Users(db.Model):
 def home(username=None):
     session['location'] = 'home'
     info = []
-    info = Users.query.all()
+    try:
+        info = Users.query.all()
+    except:
+        print("Ошибка чтения из БД")
     pageTitle = getPageTitle("/")
     return render_template('home.html', title='Вечная зима', list=listLinks, info=info, username=session['username'], pageTitle=pageTitle)
 
@@ -66,8 +70,9 @@ def userAva():
     user = Users.query.filter(Users.name == session['username']).all()
     pict = user[0].picture #request.files['picture'].read()
     if not pict:
-        p = url_for('static', filename = 'empty.png')[1:]
-        p = "D:/EternalWinter/static/empty.png"
+        #p = url_for('static', filename = 'empty.png')
+        #p = p[1:]
+        p=os.path.dirname(os.path.abspath(__file__)) + "\\static\\image\\empty.png"
         try:
             with open(p, 'rb') as file:
                 pict = file.read()
@@ -114,23 +119,21 @@ def disconnect():
 def register():
     if request.method == "POST":
         # здесь должна быть проверка корректности введенных данных
-        #try:
-        hash = generate_password_hash(str(request.form['psw']))
-        u = Users(name=request.form['name'], 
-                psw=hash, 
-                email=request.form['email'], 
-                age=request.form['age'], 
-                city=request.form['city'],
-                picture=None)
-        db.session.add(u)
-        db.session.commit()
-        #except:
-        #    db.session.rollback()
-        #    print("Ошибка добавления в БД")
-
+        try:
+            hash = generate_password_hash(str(request.form['psw']))
+            u = Users(name=request.form['name'], 
+                    psw=hash, 
+                    email=request.form['email'], 
+                    age=request.form['age'], 
+                    city=request.form['city'],
+                    picture=None)
+            db.session.add(u)
+            db.session.commit()
+        except:
+            db.session.rollback()
+            print("Ошибка добавления в БД")
         return redirect(url_for('home'))
-
-    return render_template("register.html", title="Регистрация", list=listLinks)
+    return render_template("register.html", title="Регистрация", list=listLinks, username=session['username'])
 
 @app.route("/profile")
 def profile(username=None):

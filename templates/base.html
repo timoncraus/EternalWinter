@@ -42,7 +42,6 @@
     </content>
     <div class="addition">
         <div class="connect">
-            
                 {% for message in get_flashed_messages() %}
                 <div class="message">
                     <p>{{message}}</p>
@@ -56,7 +55,7 @@
                 <br><label>Пароль:</label>
                 <br><input type="text" name="password" value="" placeholder="">
                 <br><input type="submit" value="Отправить">
-                <p><a href="forgot">Забыли пароль?</a></p>
+                <p><a href="/forgot">Забыли пароль?</a></p>
                 <p><a href="/register">Регистрация</a></p>
             </form>
             {% else %}
@@ -64,7 +63,6 @@
             <div class="outer">
                 <img class='ava' src="{{url_for('userAva')}}">
             </div>
-            
             <p><a href="/disconnect">Выйти</a></p>
             {% endif %}
         </div>
