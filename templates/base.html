@@ -79,7 +79,7 @@
                     <button type="submit" id="send-msg" class="chat-btn">Отправить</button>
                 </form>
             </div>
-            
+            <span>Отключить перенос при новом сообщении</span><div class="btn-func"></div>
         </div>
     </div>
 </main>
@@ -88,6 +88,12 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" language="JavaScript">
     $(document).ready(() => {
+        $("#messages").animate({scrollTop: $("#messages").offset().top+1600}, 2000);
+        var b = document.querySelector(".btn-func");
+        b.addEventListener("click", function(){
+            b.classList.toggle("active")
+        });
+
         $('#form-send-msg').on('submit', (e) => {
             e.preventDefault();
         });
@@ -102,9 +108,9 @@
         }
         
 
-        socket.on('connect', () => {
-            socket.send({'username': 'Service message', 'msg': username + ' has connected!'});
-        });
+        //socket.on('connect', () => {
+        //    socket.send({'username': 'Service message', 'msg': username + ' has connected!'});
+        //});
 
         $('#send-msg').on('click', () => {
             socket.send({
@@ -120,6 +126,9 @@
                     $('#messages').append(`<li class="text-muted"><strong>${data.username}:</strong> ${data.msg}</li>`);
                 } else{
                     $('#messages').append(`<li><strong>${data.username}:</strong> ${data.msg}</li>`);
+                }
+                if(!b.classList.contains("active")){
+                    $("#messages").animate({scrollTop: $("#messages").offset().top+3000}, 0);
                 }
                 console.log('Получено ')
             }

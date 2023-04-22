@@ -46,16 +46,13 @@ class ChatMessages(db.Model):
 
 @socketio.on("connect")
 def handle_connect():
-    info = ChatMessages.query.all()
-    print("Client connected!")
-
-@socketio.on("user_join")
-def handle_user_join(username):
-    print(f"User {username} joined!")
+    info = ChatMessages.query.limit(100).all()
+    for i in info:
+        send({'msg': i.msg, 'username':i.username}, broadcast=False)
+    #print("Client connected!")
 
 @socketio.on('message')
 def handleMessage(data):
-    print(data)
     send(data, broadcast=True)
     message = ChatMessages(username=data['username'], msg=data['msg'])
     db.session.add(message)
