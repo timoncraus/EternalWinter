@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gabriela&display=swap" rel="stylesheet">
     <title>{%block title%}{%endblock%}</title>
+    
 </head>
 <body>
 <header>
@@ -59,7 +60,7 @@
                 <p><a href="/register">Регистрация</a></p>
             </form>
             {% else %}
-            <p>Привет, {{username}}</p>
+            <p>Привет, <span  id="username">{{username}}</span></p>
             <div class="outer">
                 <img class='ava' src="{{url_for('userAva')}}">
             </div>
@@ -69,16 +70,61 @@
         <div class="mini-chat">
             <p class="mini-chat-title">Мини-чат</p>
             <div class="block-chat">
-                <ul class="messages"></ul>
-                <form id="send-msg"></form>
-                <label for="">Сообщение:</label>
-                <input type="text" name="login" value="" placeholder="">
-                <button type="submit">Отправить</button>
+                <ul id="messages"></ul>
+                <form id="form-send-msg" autocomplete="off" novalidate>
+                    <div class="form-group">
+                        <label for="message-input">Сообщение:</label>
+                        <input type="text" class="form-control" id="message-input" placeholder="Введите сообщение сюда">
+                    </div>
+                    <button type="submit" id="send-msg" class="chat-btn">Отправить</button>
+                </form>
             </div>
             
         </div>
     </div>
 </main>
 
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" language="JavaScript">
+    $(document).ready(() => {
+        $('#form-send-msg').on('submit', (e) => {
+            e.preventDefault();
+        });
+
+        const socket = io.connect('http://127.0.0.1:5000');
+        
+        let username = $('#username').text();
+        if( username !== ''){
+            console.log(typeof username)
+        } else{
+            username = 'Неизвестный'
+        }
+        
+
+        socket.on('connect', () => {
+            socket.send({'username': 'Service message', 'msg': username + ' has connected!'});
+        });
+
+        $('#send-msg').on('click', () => {
+            socket.send({
+                'msg': $('#message-input').val(),
+                'username':username
+            });
+            $('#message-input').val('')
+        });
+
+        socket.on('message', data => {
+            if(data.msg.length > 0){
+                if(data.username === 'Service message'){
+                    $('#messages').append(`<li class="text-muted"><strong>${data.username}:</strong> ${data.msg}</li>`);
+                } else{
+                    $('#messages').append(`<li><strong>${data.username}:</strong> ${data.msg}</li>`);
+                }
+                console.log('Получено ')
+            }
+        });
+    });
+</script>
 </body>
 </html>

@@ -2,17 +2,19 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask, render_template, request, make_response, g, session, flash, get_flashed_messages, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import util
+from flask_socketio import SocketIO, send
 from random import shuffle
 from datetime import datetime
 from sqlite3 import Binary
 import os
-app = Flask(__name__)
 
+app = Flask(__name__)
 app.config['SECRET_KEY'] = 'as8fr7s89fyfyas8f97f8afdfdsfgh9dsugri654kter9af3'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.dirname(os.path.abspath(__file__)) +'\\table.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-
+socketio = SocketIO(app, async_mode='eventlet')
+socketio.init_app(app, cors_allowed_origins="*")
 
 listLinks = [{'caption':'Главная', 'url':'/'},
             {'caption':'Мои многие нелепые мысли', 'url': '/news'},
@@ -33,6 +35,31 @@ def getPageTitle(location):
             pageTitle = i['caption']
             return pageTitle
     return pageTitle
+
+
+class ChatMessages(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(256))
+    msg = db.Column(db.Text)
+    def __repr__(self):
+        return '<User %r>' % self.username
+
+@socketio.on("connect")
+def handle_connect():
+    info = ChatMessages.query.all()
+    print("Client connected!")
+
+@socketio.on("user_join")
+def handle_user_join(username):
+    print(f"User {username} joined!")
+
+@socketio.on('message')
+def handleMessage(data):
+    print(data)
+    send(data, broadcast=True)
+    message = ChatMessages(username=data['username'], msg=data['msg'])
+    db.session.add(message)
+    db.session.commit()
 
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -113,6 +140,7 @@ def contact():
 @app.route('/disconnect')
 def disconnect():
     session['username'] = None
+    #session.pop('username', None)
     return redirect(url_for(session['location']))
 
 @app.route("/register", methods=("POST", "GET"))
@@ -158,4 +186,4 @@ def error2():
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    app.run(debug=True)
+    socketio.run(app, debug=True)
