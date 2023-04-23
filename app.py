@@ -1,10 +1,7 @@
+from flask import Flask, render_template, request, make_response, session, flash, url_for, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import Flask, render_template, request, make_response, g, session, flash, get_flashed_messages, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import util
 from flask_socketio import SocketIO, send
-from random import shuffle
-from datetime import datetime
 from sqlite3 import Binary
 import os
 
@@ -36,7 +33,6 @@ def getPageTitle(location):
             return pageTitle
     return pageTitle
 
-
 class ChatMessages(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(256))
@@ -49,7 +45,6 @@ def handle_connect():
     info = ChatMessages.query.limit(100).all()
     for i in info:
         send({'msg': i.msg, 'username':i.username}, broadcast=False)
-    #print("Client connected!")
 
 @socketio.on('message')
 def handleMessage(data):
@@ -67,10 +62,8 @@ class Users(db.Model):
     city = db.Column(db.String(100))
     picture = db.Column(db.LargeBinary, nullable=True)
     __tablename__ = 'user'
-
     def __repr__(self):
         return f"<users {self.id}>"
-
 
 @app.route("/")
 def home(username=None):
@@ -96,10 +89,8 @@ def news(username=None):
 @app.route("/userAva")
 def userAva():
     user = Users.query.filter(Users.name == session['username']).all()
-    pict = user[0].picture #request.files['picture'].read()
+    pict = user[0].picture
     if not pict:
-        #p = url_for('static', filename = 'empty.png')
-        #p = p[1:]
         p=os.path.dirname(os.path.abspath(__file__)) + "\\static\\image\\empty.png"
         try:
             with open(p, 'rb') as file:
@@ -141,7 +132,6 @@ def contact():
 @app.route('/disconnect')
 def disconnect():
     session['username'] = None
-    #session.pop('username', None)
     return redirect(url_for(session['location']))
 
 @app.route("/register", methods=("POST", "GET"))
