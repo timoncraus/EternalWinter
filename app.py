@@ -75,13 +75,17 @@ class Users(db.Model):
 @app.route("/")
 def home(username=None):
     session['location'] = 'home'
+    try:
+        username = session['username']
+    except:
+        username = None
     info = []
     try:
         info = Users.query.all()
     except:
         print("Ошибка чтения из БД")
     pageTitle = getPageTitle("/")
-    return render_template('home.html', title='Вечная зима', list=listLinks, info=info, username=session['username'], pageTitle=pageTitle)
+    return render_template('home.html', title='Вечная зима', list=listLinks, info=info, username=username, pageTitle=pageTitle)
 
 @app.route("/news")
 def news(username=None):
@@ -142,6 +146,10 @@ def disconnect():
 
 @app.route("/register", methods=("POST", "GET"))
 def register():
+    try:
+        username = session['username']
+    except:
+        username = None
     if request.method == "POST":
         # здесь должна быть проверка корректности введенных данных
         try:
@@ -158,7 +166,7 @@ def register():
             db.session.rollback()
             print("Ошибка добавления в БД")
         return redirect(url_for('home'))
-    return render_template("register.html", title="Регистрация", list=listLinks, username=session['username'])
+    return render_template("register.html", title="Регистрация", list=listLinks, username=username)
 
 @app.route("/profile")
 def profile(username=None):
