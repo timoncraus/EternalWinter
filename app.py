@@ -10,7 +10,7 @@ app.config['SECRET_KEY'] = 'as8fr7s89fyfyas8f97f8afdfdsfgh9dsugri654kter9af3'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.dirname(os.path.abspath(__file__)) +'\\table.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-socketio = SocketIO(app, async_mode='eventlet')
+socketio = SocketIO(app)
 socketio.init_app(app, cors_allowed_origins="*")
 
 listLinks = [{'caption':'Главная', 'url':'/'},
@@ -157,7 +157,7 @@ def register():
             print("Ошибка добавления в БД")
         return redirect(url_for('home'))
     return render_template("register.html", title="Регистрация", list=listLinks, username=username)
-
+ 
 @app.route("/profile")
 def profile(username=None):
     if session['username']:
